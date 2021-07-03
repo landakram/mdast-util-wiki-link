@@ -47,13 +47,13 @@
     "eslint-plugin-standard": "^4.0.1",
     "mdast-util-from-markdown": "^0.8.0",
     "micromark": "^2.10.1",
-    "micromark-extension-wiki-link": "0.0.2",
+    "micromark-extension-wiki-link": "^0.0.4",
     "mocha": "^8.2.0",
     "rollup": "^2.32.0",
     "unist-util-visit": "^2.0.3"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.1",
-    "mdast-util-to-markdown": "^0.5.1"
+    "mdast-util-to-markdown": "^0.6.5"
   }
 }
