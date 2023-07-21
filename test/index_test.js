@@ -1,12 +1,12 @@
 import assert from 'assert'
 
-import fromMarkdown from 'mdast-util-from-markdown'
+import { fromMarkdown } from 'mdast-util-from-markdown'
 import toMarkdown from 'mdast-util-to-markdown'
 import visit from 'unist-util-visit'
 
 import { syntax } from 'micromark-extension-wiki-link'
 
-import * as wikiLink from '..'
+import * as wikiLink from '../dist/index.esm.js'
 
 describe('mdast-util-wiki-link', () => {
   context('fromMarkdown', () => {

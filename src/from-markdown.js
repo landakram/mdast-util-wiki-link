@@ -6,20 +6,19 @@ function fromMarkdown (opts = {}) {
   const wikiLinkClassName = opts.wikiLinkClassName || 'internal'
   const defaultHrefTemplate = (permalink) => `#/page/${permalink}`
   const hrefTemplate = opts.hrefTemplate || defaultHrefTemplate
+  let node
 
   function enterWikiLink (token) {
-    this.enter(
-      {
-        type: 'wikiLink',
-        value: null,
-        data: {
-          alias: null,
-          permalink: null,
-          exists: null
-        }
-      },
-      token
-    )
+    node = {
+      type: 'wikiLink',
+      value: null,
+      data: {
+        alias: null,
+        permalink: null,
+        exists: null
+      }
+    }
+    this.enter(node, token)
   }
 
   function top (stack) {
@@ -39,7 +38,8 @@ function fromMarkdown (opts = {}) {
   }
 
   function exitWikiLink (token) {
-    const wikiLink = this.exit(token)
+    this.exit(token)
+    const wikiLink = node
 
     const pagePermalinks = pageResolver(wikiLink.value)
     let permalink = pagePermalinks.find(p => permalinks.indexOf(p) !== -1)

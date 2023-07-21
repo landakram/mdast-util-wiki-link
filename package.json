@@ -19,9 +19,14 @@
   },
   "repository": "https://github.com/landakram/mdast-util-wiki-link",
   "license": "MIT",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
+  "type": "module",
   "browser": "dist/index.umd.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
   "directories": {
     "test": "test"
   },
@@ -45,7 +50,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "mdast-util-from-markdown": "^0.8.0",
+    "mdast-util-from-markdown": "^2.0.0",
     "micromark": "^2.10.1",
     "micromark-extension-wiki-link": "^0.0.4",
     "mocha": "^8.2.0",
