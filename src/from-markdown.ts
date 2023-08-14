@@ -3,7 +3,7 @@ interface FromMarkdownOptions {
   pageResolver?: (name: string) => string[];
   newClassName?: string;
   wikiLinkClassName?: string;
-  hrefTemplate?: (permalink: string | undefined) => string;
+  hrefTemplate?: (permalink: string) => string;
 }
 
 function fromMarkdown (opts: FromMarkdownOptions = {}) {
@@ -12,7 +12,7 @@ function fromMarkdown (opts: FromMarkdownOptions = {}) {
   const pageResolver = opts.pageResolver || defaultPageResolver
   const newClassName = opts.newClassName || 'new'
   const wikiLinkClassName = opts.wikiLinkClassName || 'internal'
-  const defaultHrefTemplate = (permalink: string | undefined) => `#/page/${permalink}`
+  const defaultHrefTemplate = (permalink: string) => `#/page/${permalink}`
   const hrefTemplate = opts.hrefTemplate || defaultHrefTemplate
   let node: any
 
@@ -50,11 +50,16 @@ function fromMarkdown (opts: FromMarkdownOptions = {}) {
     const wikiLink = node
 
     const pagePermalinks = pageResolver(wikiLink.value)
-    let permalink = pagePermalinks.find(p => permalinks.indexOf(p) !== -1)
-    const exists = permalink !== undefined
-    if (!exists) {
-      permalink = pagePermalinks[0]
+    const target = pagePermalinks.find(p => permalinks.indexOf(p) !== -1)
+    const exists = target !== undefined
+
+    let permalink: string
+    if (exists) {
+      permalink = target
+    } else {
+      permalink = pagePermalinks[0] || ''
     }
+
     let displayName = wikiLink.value
     if (wikiLink.data.alias) {
       displayName = wikiLink.data.alias
