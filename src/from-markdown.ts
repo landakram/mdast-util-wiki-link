@@ -1,14 +1,22 @@
-function fromMarkdown (opts = {}) {
+interface FromMarkdownOptions {
+  permalinks?: string[];
+  pageResolver?: (name: string) => string[];
+  newClassName?: string;
+  wikiLinkClassName?: string;
+  hrefTemplate?: (permalink: string | undefined) => string;
+}
+
+function fromMarkdown (opts: FromMarkdownOptions = {}) {
   const permalinks = opts.permalinks || []
-  const defaultPageResolver = (name) => [name.replace(/ /g, '_').toLowerCase()]
+  const defaultPageResolver = (name: string) => [name.replace(/ /g, '_').toLowerCase()]
   const pageResolver = opts.pageResolver || defaultPageResolver
   const newClassName = opts.newClassName || 'new'
   const wikiLinkClassName = opts.wikiLinkClassName || 'internal'
-  const defaultHrefTemplate = (permalink) => `#/page/${permalink}`
+  const defaultHrefTemplate = (permalink: string | undefined) => `#/page/${permalink}`
   const hrefTemplate = opts.hrefTemplate || defaultHrefTemplate
-  let node
+  let node: any
 
-  function enterWikiLink (token) {
+  function enterWikiLink (this: any, token: any) {
     node = {
       type: 'wikiLink',
       value: null,
@@ -21,23 +29,23 @@ function fromMarkdown (opts = {}) {
     this.enter(node, token)
   }
 
-  function top (stack) {
+  function top (stack: any) {
     return stack[stack.length - 1]
   }
 
-  function exitWikiLinkAlias (token) {
+  function exitWikiLinkAlias (this: any, token: any) {
     const alias = this.sliceSerialize(token)
     const current = top(this.stack)
     current.data.alias = alias
   }
 
-  function exitWikiLinkTarget (token) {
+  function exitWikiLinkTarget (this: any, token: any) {
     const target = this.sliceSerialize(token)
     const current = top(this.stack)
     current.value = target
   }
 
-  function exitWikiLink (token) {
+  function exitWikiLink (this: any, token: any) {
     this.exit(token)
     const wikiLink = node
 

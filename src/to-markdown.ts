@@ -1,6 +1,10 @@
 import safe from 'mdast-util-to-markdown/lib/util/safe'
 
-function toMarkdown (opts = {}) {
+interface ToMarkdownOptions {
+  aliasDivider?: string;
+}
+
+function toMarkdown (opts: ToMarkdownOptions = {}) {
   const aliasDivider = opts.aliasDivider || ':'
 
   const unsafe = [
@@ -14,7 +18,7 @@ function toMarkdown (opts = {}) {
     }
   ]
 
-  function handler (node, _, context) {
+  function handler (node: any, _: any, context: any) {
     const exit = context.enter('wikiLink')
 
     const nodeValue = safe(context, node.value, { before: '[', after: ']' })
