@@ -20,11 +20,11 @@
   "repository": "https://github.com/landakram/mdast-util-wiki-link",
   "license": "MIT",
   "type": "module",
-  "browser": "dist/index.umd.js",
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "directories": {

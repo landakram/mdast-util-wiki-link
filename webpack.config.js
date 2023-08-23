@@ -21,7 +21,7 @@ export default [
       extensions: ['.ts', '.js'],
     },
     output: {
-      filename: 'index.esm.js',
+      filename: 'index.js',
       path: path.resolve(__dirname, 'dist'),
       libraryTarget: 'module',
     },
@@ -46,32 +46,9 @@ export default [
       extensions: ['.ts', '.js'],
     },
     output: {
-      filename: 'index.cjs.js',
+      filename: 'index.cjs',
       path: path.resolve(__dirname, 'dist'),
       libraryTarget: 'commonjs2',
     },
-  },
-  // UMD Configuration
-  {
-    mode: 'production',
-    entry: './src/index.ts',
-    module: {
-      rules: [
-        {
-          test: /\.ts$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
-        },
-      ],
-    },
-    resolve: {
-      extensions: ['.ts', '.js'],
-    },
-    output: {
-      filename: 'index.umd.js',
-      path: path.resolve(__dirname, 'dist'),
-      libraryTarget: 'umd',
-      globalObject: 'this',
-    },
-  },
+  }
 ];
