@@ -1,52 +1,65 @@
-function fromMarkdown (opts = {}) {
+interface FromMarkdownOptions {
+  permalinks?: string[];
+  pageResolver?: (name: string) => string[];
+  newClassName?: string;
+  wikiLinkClassName?: string;
+  hrefTemplate?: (permalink: string) => string;
+}
+
+function fromMarkdown (opts: FromMarkdownOptions = {}) {
   const permalinks = opts.permalinks || []
-  const defaultPageResolver = (name) => [name.replace(/ /g, '_').toLowerCase()]
+  const defaultPageResolver = (name: string) => [name.replace(/ /g, '_').toLowerCase()]
   const pageResolver = opts.pageResolver || defaultPageResolver
   const newClassName = opts.newClassName || 'new'
   const wikiLinkClassName = opts.wikiLinkClassName || 'internal'
-  const defaultHrefTemplate = (permalink) => `#/page/${permalink}`
+  const defaultHrefTemplate = (permalink: string) => `#/page/${permalink}`
   const hrefTemplate = opts.hrefTemplate || defaultHrefTemplate
+  let node: any
 
-  function enterWikiLink (token) {
-    this.enter(
-      {
-        type: 'wikiLink',
-        value: null,
-        data: {
-          alias: null,
-          permalink: null,
-          exists: null
-        }
-      },
-      token
-    )
+  function enterWikiLink (this: any, token: any) {
+    node = {
+      type: 'wikiLink',
+      value: null,
+      data: {
+        alias: null,
+        permalink: null,
+        exists: null
+      }
+    }
+    this.enter(node, token)
   }
 
-  function top (stack) {
+  function top (stack: any) {
     return stack[stack.length - 1]
   }
 
-  function exitWikiLinkAlias (token) {
+  function exitWikiLinkAlias (this: any, token: any) {
     const alias = this.sliceSerialize(token)
     const current = top(this.stack)
     current.data.alias = alias
   }
 
-  function exitWikiLinkTarget (token) {
+  function exitWikiLinkTarget (this: any, token: any) {
     const target = this.sliceSerialize(token)
     const current = top(this.stack)
     current.value = target
   }
 
-  function exitWikiLink (token) {
-    const wikiLink = this.exit(token)
+  function exitWikiLink (this: any, token: any) {
+    this.exit(token)
+    const wikiLink = node
 
     const pagePermalinks = pageResolver(wikiLink.value)
-    let permalink = pagePermalinks.find(p => permalinks.indexOf(p) !== -1)
-    const exists = permalink !== undefined
-    if (!exists) {
-      permalink = pagePermalinks[0]
+    const target = pagePermalinks.find(p => permalinks.indexOf(p) !== -1)
+    const exists = target !== undefined
+
+    let permalink: string
+    if (exists) {
+      permalink = target
+    } else {
+      permalink = pagePermalinks[0] || ''
     }
+
     let displayName = wikiLink.value
     if (wikiLink.data.alias) {
       displayName = wikiLink.data.alias

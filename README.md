@@ -62,7 +62,7 @@ The `hName` and other `h` fields provide compatibility with [`rehype`](https://g
 Taking the `ast` from the prior example, let's go back to markdown:
 
 ```javascript
-import fromMarkdown from 'mdast-util-from-markdown'
+import { fromMarkdown } from 'mdast-util-from-markdown'
 import * as wikiLink from 'mdast-util-wiki-link'
 
 let markdownString = toMarkdown(ast, { extensions: [wikiLink.toMarkdown()] }).trim()
